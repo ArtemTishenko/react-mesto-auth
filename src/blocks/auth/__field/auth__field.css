@@ -1,0 +1,28 @@
+.auth__field{
+  max-width: 358px;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #CCCCCC;
+  outline: none;
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  padding: 0 0 10px 0;
+  background-color: rgba(0, 0, 0, 1);
+  color: white;
+}
+
+.auth__field:focus{
+  outline: auto 1px;
+}
+
+.auth__field:first-child{
+  margin: 0 0 30px 0;
+}
+
+@media screen and (max-width:670px){
+  .auth__field{
+    max-width: 260px;
+  }
+}

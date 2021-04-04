@@ -1,0 +1,22 @@
+.element__like {
+  margin: 0 0 3px auto;
+  background-image: url(../__like/like.svg);
+  background-color: transparent;
+  object-fit: cover;
+  background-repeat: no-repeat;
+  max-width: 20.76px;
+  width: 100%;
+  height: 18.13px;
+  border: none;
+  padding: 0;
+
+}
+
+
+
+.element__like:hover {
+  border: none;
+}
+.element__like:focus{
+  outline: none;
+}

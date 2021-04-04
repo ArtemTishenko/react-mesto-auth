@@ -1,0 +1,25 @@
+.popup__field {
+  max-width: 358px;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(0,0,0, 0.2);
+  outline: none;
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  padding: 0 0 10px 0;
+}
+@media screen and (max-width:670px){
+  .popup__field{
+   max-width: 238px;
+  }
+}
+
+.popup__field:focus{
+  outline: auto 1px;
+}
+
+.popup__field:first-child{
+  margin: 0 0 5px 0;
+}

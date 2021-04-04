@@ -1,0 +1,24 @@
+.header__hamburger-menu{
+  display: none;
+}
+
+@media screen and (max-width:670px){
+  .header__hamburger-menu{
+    display: flex;
+    align-self: center;
+    width: 24px;
+    height: 18px;
+    background-image: url(../__hamburger-menu/ham1.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    color: white;
+    margin: 0 30px 0 0;
+    padding: 0;
+    border-width: 0;
+    background-color: inherit;
+
+  }
+  .header__hamburger-menu:focus{
+ 
+  }
+}

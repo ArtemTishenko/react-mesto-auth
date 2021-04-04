@@ -1,0 +1,18 @@
+.header__nav{
+  display: flex;
+  align-items: baseline;
+
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-size: 18px;
+  line-height: 22px;  
+  color: white;
+  flex-wrap: wrap;
+  visibility: visible;
+}
+
+@media screen and (max-width:670px){
+  .header__nav{
+   /* display: none; */
+  }
+}
+
