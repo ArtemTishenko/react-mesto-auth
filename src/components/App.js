@@ -3,7 +3,7 @@ import "../index.css";
 import Header from "../components/Header";
 import Main from "../components/Main";
 import Footer from "../components/Footer";
-import Login from  "../components/Login";
+import Login from "../components/Login";
 import Register from "../components/Register";
 import InfoTooltip from "../components/InfoTooltip";
 
@@ -16,9 +16,8 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext"; //импо�
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import { Route, Switch } from "react-router-dom";
-
-
+import { Redirect, Route, Switch } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({ name: "", about: "" }); //задали текущее значение состония объекту currentUser т.к. при первом монтирование попадается undefined
@@ -62,8 +61,9 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard({ isOpen: false, linkCard: {}, nameCard: {} });
   }
-  useEffect(() => { //получение данных пользователя
-   
+  useEffect(() => {
+    //получение данных пользователя
+
     api
       .getInfoProfile()
       .then((dataUser) => {
@@ -107,7 +107,6 @@ function App() {
           setCards((state) => {
             return state.map((c) => (c._id === card._id ? newCard : c));
           });
-        
         })
         .catch((err) => {
           console.log(err, "ошибка из api.deleteLike");
@@ -126,16 +125,19 @@ function App() {
     }
   }
   function handleCardDelete(card) {
-    api.deleteCard(card._id)
-    .then(() => {
-      setCards(cardsContext.filter(c=>c._id !== card._id))})
-    .catch((err) => {
-      console.log(err, "Ошибка при удалении карточки");
-    });
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        setCards(cardsContext.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => {
+        console.log(err, "Ошибка при удалении карточки");
+      });
   }
 
-  useEffect(() => {// получение карточек
-    
+  useEffect(() => {
+    // получение карточек
+
     api
       .getAllInitialCards()
       .then((dataCards) => {
@@ -157,30 +159,41 @@ function App() {
         console.log(err, "Ошибка при отправке новой карточки");
       });
   }
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
-  const {loggedIn, setLoggedIn}=React.useState(false)
   return (
     <>
-   
       <CurrentUserContext.Provider value={currentUser}>
-            <div className="root">
-              <div className="container">
-                
-                <Switch>
-                  <Route exact path="/sign-up">
-                    <Header />
-                    <Register />
-                    <Footer />
-                    <InfoTooltip />
-                  </Route>
-                  <Route exact path="/sign-in">
-                    <Header />
-                    <Login />
-                    <Footer />
-                  </Route>
-                  <Route exact path="/">
-                    <Header />
-                    <Main
+        <div className="root">
+          <div className="container">
+            <Header/>
+
+            <Switch>
+              <ProtectedRoute 
+                path="/cards"
+                loggedIn={loggedIn}
+                component={Main}
+                onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onCardClick={handleCardClick}
+                cards={cardsContext}
+                onCardLike={handleCardLike} 
+                onCardDelete={handleCardDelete}
+              />
+
+              <Route exact path="/sign-up">
+                <Register />
+                <InfoTooltip />
+              </Route>
+
+              <Route exact path="/sign-in">
+                <Login />
+                <InfoTooltip />
+              </Route>
+
+              {/* <Route exact path="/cards">
+                 <Main
                       onEditAvatar={handleEditAvatarClick}
                       onEditProfile={handleEditProfileClick}
                       onAddPlace={handleAddPlaceClick}
@@ -188,42 +201,37 @@ function App() {
                       cards={cardsContext}
                       onCardLike={handleCardLike}
                       onCardDelete={handleCardDelete}
-                    />
-                    <Footer /> 
+                    /> 
+              </Route> */}
 
-                    <EditProfilePopup
-                      isOpen={isEditProfilePopupOpen}
-                      onClose={closeAllPopups}
-                      onUpdateUser={handleUpdateUser}
-                    />
+              <Route exact path="/">
+                {loggedIn ? (<Redirect to="/cards" />) : (<Redirect to="/sign-in" />)}
+              </Route>
+            </Switch>
 
-                    <AddPlacePopup
-                      isOpen={isAddPlacePopupOpen}
-                      onClose={closeAllPopups}
-                      onAddPlace={handleAddPlaceSubmit}
-                    />
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}
+            />
 
-                    <EditAvatarPopup
-                      isOpen={isEditAvatarPopupOpen}
-                      onClose={closeAllPopups}
-                      onUpdateAvatar={handleUpdateAvatar}
-                    />
-                    <ImagePopup card={selectedCard} onClose={closeAllPopups} /> 
-                    
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlaceSubmit}
+            />
 
-                  </Route>
-                  
-                </Switch>
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+            />
+            <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
-                
-                
-              </div>
-
-
-            </div>
-        </CurrentUserContext.Provider>
-   
-      
+            <Footer />
+          </div>
+        </div>
+      </CurrentUserContext.Provider>
     </>
   );
 }

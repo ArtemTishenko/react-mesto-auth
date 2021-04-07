@@ -1,5 +1,5 @@
 import imgOk from '../../src/blocks/popup/__info-img/info-img-ok.svg';
-import imgCancel from '../../src/blocks/popup/__info-img/info-img-cancel.svg';
+//import imgCancel from '../../src/blocks/popup/__info-img/info-img-cancel.svg';
 
 function InfoTooltip(props){
   return(
@@ -14,7 +14,7 @@ function InfoTooltip(props){
             id="popup__button-close_info"
             onClick={props.onClose}
           ></button>
-          <img className="popup__info-img" src={imgOk} />
+          <img className="popup__info-img" src={imgOk} alt='статус'/>
           <p className="popup__info-title">Вы успешно зарегистрировались!</p>
         </div>
       </div>
