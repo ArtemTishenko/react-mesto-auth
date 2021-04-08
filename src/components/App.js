@@ -184,12 +184,12 @@ function App() {
 
               <Route exact path="/sign-up">
                 <Register />
-                <InfoTooltip />
+                
               </Route>
 
               <Route exact path="/sign-in">
                 <Login />
-                <InfoTooltip />
+                
               </Route>
 
               {/* <Route exact path="/cards">

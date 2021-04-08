@@ -8,24 +8,17 @@ export const register = (password, email) => {
     },
     body: JSON.stringify({
       password,
-      email
-      
+      email 
     }),
   })
-    .then((response) => {
-      console.log('response',response)
-      try {
-        if (response.status === 200) {
-          console.log('response',response)
-          return response.json();
-        }
-      } catch (e) {
-        return e;
-      }
-    })
-    .then((res) => {
-
-      res.ok ? res.json() : Promise.reject(`Ошибка:${res.status}`);
-    })
-    .catch((err)=>{console.log(err, 'Ошибка в register')})
+  .then((res)=>{ // в res
+    console.log("Auth.js .then2 ##### res",res)
+    if (res.ok){ 
+      return res
+    } return Promise.reject(`${res.status}`);
+  })
+  
 };
+
+
+  

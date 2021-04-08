@@ -1,7 +1,8 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useHistory } from 'react-router-dom';
 import * as Auth from '../components/Auth.js';
+import InfoTooltip from "./InfoTooltip.js";
 
 
 function Register() {
@@ -11,8 +12,11 @@ function Register() {
     password:'',
     email:''
   })
-  const [statusInfoToolTip, setStatusInfoToolTip] = React.useState(false) // стэйт для отображения информационного соосбщения
+  const [openInfoToolTip, setOpenInfoToolTip] = React.useState(false) // стэйт для отображения информационного соосбщения
+  const [statusInfoToolTip,setStatusInfoToolTip] = React.useState("")//стейт с ошибкой
   const history = useHistory();
+
+  const [user, setUser] = React.useState({}) //стейт для записи данных пришедших от сервера 
 
   const handleChange = (e)=>{
     const {name, value}=e.target
@@ -21,30 +25,45 @@ function Register() {
       [name]:value //записывается в стейт userData знаечния инпутов с атрибутом name // <input nama="email" >
     })
   }
+  const closePopup = ()=>{
+    setOpenInfoToolTip(false)
+  }
+  useEffect(()=>{
+    if (user){ // если есть данные user, то  
+     // localStorage.setItem('_id', user.data._id) 
+      console.log("###user",user)
+     // console.log('###localStorageId ',localStorage.getItem("_id"))
+    }
+  },[user])
+   
 
-  const handleSubmit=(e)=>{
-    e.preventDefault();
-    //if (this.state.password === this.state.confirmPassword){
+    const handleSubmit = (e)=>{
+      e.preventDefault();
       let {password, email } = userData;
-        console.log('email',email)
-        console.log('password',password)
-       Auth.register(password, email)
-        .then((res) => {
-         console.log('res - Auth.register',res)
-          // if (res.status !== 400){
-          //   setStatusInfoToolTip(true)// задаем стейту true, если ошибок нет (использовать этот стейт для отображения infoToolTip c картинкой imgOk )
-          //   //history.push('/sign-in')
-            
-          //   // } 
-          // }else{
-          //   setStatusInfoToolTip(false) //задаем стейту false, если есть ошибка ответа от сервера (использовать для отображения картинки imgCancel)
-          // }
-       })
-      //  .catch((err)=>{console
-
-      //  }) 
-  } 
-      
+      Auth
+        .register(password,email)
+        .then((response)=>{// в response объект {email:___, _id:____}
+          // setUser(response);// записываем полученные днные с сервер в стейт
+           setStatusInfoToolTip(response.status)//стейт для отображения infoToolTip-OK
+           console.log("Register.js .then1 ##### response",response)
+           console.log("Register.js .then1 ##### response.status",response.status)
+           
+           //console.log("Register.js .then1 #####response.json()", response.json())
+           return response.json()
+        })
+        .then((user)=>{
+          console.log(".then2 Register.js #####rez",user)
+          setUser(user);// записываем полученные днные с сервер в стейт
+          setOpenInfoToolTip(true)//стейт для отображения infoToolTip
+        })
+        .catch((err)=>{
+          setOpenInfoToolTip(true);// стейт для отображения infoToolTip
+          setStatusInfoToolTip(err)
+          console.log("err в Register",err)
+          
+        })    
+    }
+    // console.log('Rgister.js .catch ###statusInfoToolTip', statusInfoToolTip)
 
   return(
     <>
@@ -63,12 +82,12 @@ function Register() {
             formNoValidate
             autoComplete="on"
             name="email"
-            value={userData.email}
+            defaultValue={'artish@yandex.ru'}
             onChange={handleChange}
             
           />
           <input
-            type="password"
+            type="text"
             className="auth__field auth__field_type_password"
             id="auth__field_type_register-password"
             placeholder="Пароль"
@@ -78,7 +97,7 @@ function Register() {
             formNoValidate  
             autoComplete="on"
             name="password"
-            value={userData.password}
+            defaultValue={"123"}
             onChange={handleChange}
           /> 
 
@@ -93,6 +112,7 @@ function Register() {
           <Link to="/sign-in" className="auth__subtitle auth__subtitle_link"> Войти</Link>
         </p>
       </div>
+      <InfoTooltip status={statusInfoToolTip} isOpen={openInfoToolTip} onClose={closePopup}/>
       </>
    
     
