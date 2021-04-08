@@ -14,7 +14,7 @@ function Register() {
   })
   const [openInfoToolTip, setOpenInfoToolTip] = React.useState(false) // стэйт для отображения информационного соосбщения
   const [statusInfoToolTip,setStatusInfoToolTip] = React.useState("")//стейт с ошибкой
-  const history = useHistory();
+  //const history = useHistory();
 
   const [user, setUser] = React.useState({}) //стейт для записи данных пришедших от сервера 
 
@@ -30,9 +30,10 @@ function Register() {
   }
   useEffect(()=>{
     if (user){ // если есть данные user, то  
-     // localStorage.setItem('_id', user.data._id) 
+      //localStorage.setItem('_id', user.data._id) 
       console.log("###user",user)
      // console.log('###localStorageId ',localStorage.getItem("_id"))
+     //console.log('Rgister.js ###statusInfoToolTip', statusInfoToolTip)
     }
   },[user])
    
@@ -43,18 +44,19 @@ function Register() {
       Auth
         .register(password,email)
         .then((response)=>{// в response объект {email:___, _id:____}
-          // setUser(response);// записываем полученные днные с сервер в стейт
            setStatusInfoToolTip(response.status)//стейт для отображения infoToolTip-OK
            console.log("Register.js .then1 ##### response",response)
            console.log("Register.js .then1 ##### response.status",response.status)
            
-           //console.log("Register.js .then1 #####response.json()", response.json())
            return response.json()
         })
         .then((user)=>{
-          console.log(".then2 Register.js #####rez",user)
+          console.log(".then2 Register.js #####rez",user.data._id)
           setUser(user);// записываем полученные днные с сервер в стейт
           setOpenInfoToolTip(true)//стейт для отображения infoToolTip
+
+          localStorage.setItem('jwt_id',user.data._id)
+          console.log('###localStorageId ',localStorage.getItem("jwt_id"))
         })
         .catch((err)=>{
           setOpenInfoToolTip(true);// стейт для отображения infoToolTip
@@ -63,7 +65,7 @@ function Register() {
           
         })    
     }
-    // console.log('Rgister.js .catch ###statusInfoToolTip', statusInfoToolTip)
+     
 
   return(
     <>
@@ -113,7 +115,7 @@ function Register() {
         </p>
       </div>
       <InfoTooltip status={statusInfoToolTip} isOpen={openInfoToolTip} onClose={closePopup}/>
-      </>
+    </>
    
     
   );
