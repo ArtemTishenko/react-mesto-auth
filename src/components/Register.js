@@ -55,8 +55,8 @@ function Register() {
           setUser(user);// записываем полученные днные с сервер в стейт
           setOpenInfoToolTip(true)//стейт для отображения infoToolTip
 
-          localStorage.setItem('jwt_id',user.data._id)
-          console.log('###localStorageId ',localStorage.getItem("jwt_id"))
+          // localStorage.setItem('jwt_id',user.data._id)
+          // console.log('###localStorageId ',localStorage.getItem("jwt_id"))
         })
         .catch((err)=>{
           setOpenInfoToolTip(true);// стейт для отображения infoToolTip
