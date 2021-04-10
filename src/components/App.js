@@ -16,9 +16,10 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext"; //импо�
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 
+import * as Auth from '../components/Auth.js';
 function App() {
   const [currentUser, setCurrentUser] = React.useState({ name: "", about: "" }); //задали текущее значение состония объекту currentUser т.к. при первом монтирование попадается undefined
   const [cardsContext, setCards] = React.useState([]); //задали текущее значение состония переменной cardsContext
@@ -159,14 +160,91 @@ function App() {
         console.log(err, "Ошибка при отправке новой карточки");
       });
   }
+  //_______________NEW_____________________________________
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState({email:""});
+  const[statusSignIn, setStatusSignIn]= React.useState(false)
+  const history = useHistory();
+  
+  useEffect(()=>{
+   //S// console.log(statusSignIn, 'xxxx useEffect') 
+    tokenCheck()
+    // console.log('Вызвался UseEffect')
+  }, [loggedIn])
+  useEffect(() => {
+    //S//console.log(loggedIn, 'loggedIn')
+    if (loggedIn) {
+      // setStatusSignIn(true) && <Header />
+      history.push("/cards");
+      
+      // console.log('#####user',userEmail.email)
+    }
+    
+  },[loggedIn])
+  
 
+  function handleLogin(){
+    setLoggedIn(true);
+  }
+
+  const tokenCheck=()=>{
+    if (localStorage.getItem('jwt')){
+      let token = localStorage.getItem('jwt');
+      console.log("token yyyyyyy",token)
+
+      Auth
+        .getContent(token)
+        .then((response)=>{
+          //S//console.log("response yyyyyyy",response)
+          // console.log("App.js getContent .then1 ###response", response)
+          return response.json()
+        })
+        .then((data)=>{
+          //S//console.log(data, 'yyyyyyy BEFORE TRUE')
+          // console.log("App.js getContent .then2 ###data", data)
+          if(data){
+            //S//console.log(data, 'yyyyyyy TRUe')
+            setLoggedIn(true)
+            setUserEmail({email:data.data.email})
+            
+          }else{
+
+          }
+        })
+        .catch((err)=>{console.log('err из getContent',err)})
+    }
+  }
+  
+  function signOut(){//Выход
+    localStorage.removeItem('jwt');
+    history.push('/sign-in');
+    setLoggedIn(false)
+    setStatusSignIn(false);
+  }
+  function signUp(){ //Регистрация
+    history.push('/sign-up');
+    setStatusSignIn(true);
+  }
+  function signIn(){//Авторизация
+    history.push('/sign-in')
+     setStatusSignIn(false)
+  }
+  console.log("statusSignIn", statusSignIn)
+  console.log("statusLogedIn",loggedIn)
+  //_________________________________________________________
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="root">
           <div className="container">
-            <Header/>
+            <Header
+            userEmail={userEmail}
+            statusLoggedIn={loggedIn}
+            signOut={signOut}
+            signUp={signUp}
+            signIn={signIn}
+            statusSignIn={statusSignIn}
+            />
 
             <Switch>
               <ProtectedRoute 
@@ -188,21 +266,9 @@ function App() {
               </Route>
 
               <Route exact path="/sign-in">
-                <Login />
+                <Login onLogin={handleLogin}/>
                 
               </Route>
-
-              {/* <Route exact path="/cards">
-                 <Main
-                      onEditAvatar={handleEditAvatarClick}
-                      onEditProfile={handleEditProfileClick}
-                      onAddPlace={handleAddPlaceClick}
-                      onCardClick={handleCardClick}
-                      cards={cardsContext}
-                      onCardLike={handleCardLike}
-                      onCardDelete={handleCardDelete}
-                    /> 
-              </Route> */}
 
               <Route exact path="/">
                 {loggedIn ? (<Redirect to="/cards" />) : (<Redirect to="/sign-in" />)}

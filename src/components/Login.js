@@ -1,7 +1,10 @@
 import React from "react";
+import { useHistory } from "react-router";
 import * as Auth from '../components/Auth.js';
+import InfoTooltip from "./InfoTooltip.js";
 
-function Login() {
+
+function Login({onLogin}) {
   const [userData, setUserData] = React.useState({
     password:'',
     email:''
@@ -13,6 +16,7 @@ function Login() {
       [name]: value
     });
   }
+  const history = useHistory();
  
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,17 +25,24 @@ function Login() {
     console.log("email",email);
 
     Auth.authorize(password, email)
-      .then((response) => {
-        console.log("Login.js autorize .then1 ###response",response)
-        return response.json()
-      })
-      .then((data)=>{
-        console.log("Login.js autorize .then2 ###result",data.token)
-         localStorage.setItem('jwt',data.token)
-         console.log('###localStorageJWT ',localStorage.getItem("jwt"))
+        .then((data) => {
+          console.log("Login.js autorize .then1 ###data",data)
+          if(data.token){
+            setUserData({password:'',email:''})
+            onLogin();
+            history.push("/cards")
+            return;
+          
+          }
 
-      })
-  }    
+        })
+        .catch((err) => {
+          console.log('err из Login',err)
+        });
+  
+
+        
+  }   
 
   return (
     <>
@@ -73,7 +84,9 @@ function Login() {
     
  
     </div>
+   
     </>
   );
 }
+
 export default Login;
