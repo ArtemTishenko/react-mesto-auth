@@ -38,17 +38,17 @@ function App() {
     nameCard: {},
   });
 
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [logedIn, setLogedIn] = React.useState(false);
   const [userEmail, setUserEmail] = React.useState({email:""});
-  const[statusSignIn, setStatusSignIn]= React.useState(false)
+  const[statusSignIn, setStatusSignIn]= React.useState()
   const history = useHistory();
 
   useEffect(()=>{
     tokenCheck()
-    if (loggedIn) {
+    if (logedIn) {
       history.push("/cards"); 
     } 
-  }, [loggedIn,history])
+  }, [logedIn,history])
 
 
   function handleEditAvatarClick() {
@@ -171,11 +171,12 @@ function App() {
       });
   }
   function handleLogin(){
-    setLoggedIn(true);
+    setLogedIn(true);
   }
   const tokenCheck=()=>{
     if (localStorage.getItem('jwt')){
       let token = localStorage.getItem('jwt');
+      
       Auth
         .getContent(token)
         .then((response)=>{
@@ -183,7 +184,7 @@ function App() {
         })
         .then((data)=>{
           if(data){
-            setLoggedIn(true)
+            setLogedIn(true)
             setUserEmail({email:data.data.email})
             
           }else{
@@ -196,7 +197,7 @@ function App() {
   function signOut(){//Выход
     localStorage.removeItem('jwt');
     history.push('/sign-in');
-    setLoggedIn(false)
+    setLogedIn(false)
     setStatusSignIn(false);
   }
   function signUp(){ //Регистрация
@@ -207,19 +208,7 @@ function App() {
     history.push('/sign-in')
      setStatusSignIn(false)
   }
-  //_______________NEW_____________________________________
-
-  
-
-
-  
-
-
-
-  
-
  
-  //_________________________________________________________
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
@@ -227,7 +216,7 @@ function App() {
           <div className="container">
             <Header
             userEmail={userEmail}
-            statusLoggedIn={loggedIn}
+            statusLogedIn={logedIn}
             signOut={signOut}
             signUp={signUp}
             signIn={signIn}
@@ -237,7 +226,7 @@ function App() {
             <Switch>
               <ProtectedRoute 
                 path="/cards"
-                loggedIn={loggedIn}
+                logedIn={logedIn}
                 component={Main}
                 onEditAvatar={handleEditAvatarClick}
                 onEditProfile={handleEditProfileClick}
@@ -259,7 +248,7 @@ function App() {
               </Route>
 
               <Route exact path="/">
-                {loggedIn ? (<Redirect to="/cards" />) : (<Redirect to="/sign-in" />)}
+                {logedIn ? (<Redirect to="/cards" />) : (<Redirect to="/sign-in" />)}
               </Route>
             </Switch>
 

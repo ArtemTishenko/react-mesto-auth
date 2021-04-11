@@ -12,6 +12,10 @@
 @import url(./blocks/header/__email/header__email.css);
 @import url(./blocks/header/__sign/header__sign.css); 
 @import url(./blocks/header/__hamburger-menu/header__hamburger-menu.css);
+@import url(./blocks/header/__nav-mobile/header__nav-mobile.css);
+@import url(./blocks/header/__email/_type/header__email_type_mobile.css);
+@import url(./blocks/header/__sign/_type/header__sign_type_mobile.css);
+@import url(./blocks/header/__content/header__content.css);
 
 @import url(./blocks/profile/profile.css);
 @import url(./blocks/profile/__button-add/profile__button-add.css);

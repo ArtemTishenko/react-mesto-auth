@@ -55,13 +55,13 @@ function Register(props) {
             minLength="3"
             maxLength="60"
             formNoValidate
-            autoComplete="on"
+            autoComplete="off"
             name="email"
-            defaultValue={"artish@yandex.ru"}
+           
             onChange={handleChange}
           />
           <input
-            type="text"
+            type="password"
             className="auth__field auth__field_type_password"
             id="auth__field_type_register-password"
             placeholder="Пароль"
@@ -71,7 +71,7 @@ function Register(props) {
             formNoValidate
             autoComplete="on"
             name="password"
-            defaultValue={"123"}
+            
             onChange={handleChange}
           />
 

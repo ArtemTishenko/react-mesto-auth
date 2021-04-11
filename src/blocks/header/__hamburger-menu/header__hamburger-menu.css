@@ -21,4 +21,7 @@
   .header__hamburger-menu:focus{
     outline: none;
   }
+  .header__hamburger-menu_close{
+    background-image: url(../__hamburger-menu/ham-close.svg);
+  }
 }

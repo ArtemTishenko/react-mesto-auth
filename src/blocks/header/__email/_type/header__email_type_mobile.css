@@ -1,0 +1,9 @@
+.header__email_type_mobile{
+  display: none;
+}
+@media screen and (max-width:670px){
+  .header__email_type_mobile{
+    display: block;
+    margin: 40px 0 0 0;
+  }
+}

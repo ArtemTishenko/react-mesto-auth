@@ -34,6 +34,7 @@ function Login({ onLogin }) {
       })
       .then((data) => {
         
+        localStorage.setItem('jwt',data.token)
         if (data.token) {
           setUserData({ password: "", email: "" });
           onLogin();
@@ -64,11 +65,11 @@ function Login({ onLogin }) {
             formNoValidate
             autoComplete="off"
             name="email"
-            defaultValue={"artish0100@yandex.ru"}
+            
             onChange={handleChange}
           />
           <input
-            type="text"
+            type="password"
             className="auth__field auth__field_type_password"
             id="auth__field_type_login-password"
             placeholder="Пароль"
@@ -77,7 +78,7 @@ function Login({ onLogin }) {
             maxLength="60"
             formNoValidate
             autoComplete="off"
-            defaultValue={"123"}
+            
             name="password"
             onChange={handleChange}
           />
