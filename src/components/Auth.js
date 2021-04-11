@@ -11,12 +11,7 @@ export const register = (password, email) => {
       email 
     }),
   })
-  .then((res)=>{ // в res
-    console.log("Auth.js .then2 ##### res",res)
-    if (res.ok){ 
-      return res
-    } return Promise.reject(`${res.status}`);
-  })
+  .then(checkResponse)
   
 };
 
@@ -31,22 +26,8 @@ export const authorize = (password, email)=>{
       email
     })
   })
-  .then((res)=>{ // в res
-    console.log("Auth.js authorize .then1 ##### res",res)
-    if (res.ok){ 
-      return res.json()
-    } return Promise.reject(`${res.status}`);
-  })
-  .then((data)=>{
-    console.log("Auth.js authorize .then2 ##### data",data)
-    if(data.token){
-      localStorage.setItem('jwt',data.token)
-      return data
-    }else {
-      return ;
-    }
-    
-  })
+  .then(checkResponse)
+
 }
 export const getContent = (token)=>{
   return fetch(`${BASE_URL}/users/me`,{
@@ -56,20 +37,15 @@ export const getContent = (token)=>{
       "Authorization" : `Bearer ${token}`
     }
   })
-  .then((res)=>{
-    if (res.ok){ 
-      return res //RESPONSE
-    } return Promise.reject(`${res.status}`);
-  })
+  .then(checkResponse)
  
 }
 
-// function checkResponse(res){
-//   if (res.ok){ 
-//     return res
-//   } return Promise.reject(`${res.status}`);
-// }
+function checkResponse(res){
+  if (res.ok){ 
+    return res
+  } return Promise.reject(`${res.status}`);
+}
 
-//!сделать рефакторинг ввести функцию checkResponse как в вебинаре
 
   

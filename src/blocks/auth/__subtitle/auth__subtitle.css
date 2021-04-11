@@ -5,4 +5,9 @@
   color: white;
   text-align: center;
   margin: 0;
+  background-color: inherit;
+  color: white;
+  border: none;
+  outline: none;
+
 }

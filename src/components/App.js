@@ -5,7 +5,7 @@ import Main from "../components/Main";
 import Footer from "../components/Footer";
 import Login from "../components/Login";
 import Register from "../components/Register";
-import InfoTooltip from "../components/InfoTooltip";
+
 
 import ImagePopup from "../components/ImagePopup";
 import api from "../utils/api";
@@ -38,7 +38,18 @@ function App() {
     nameCard: {},
   });
 
-  // подняли стейт для того то бы можно было использовать в других компонентх, а не только в main
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [userEmail, setUserEmail] = React.useState({email:""});
+  const[statusSignIn, setStatusSignIn]= React.useState(false)
+  const history = useHistory();
+
+  useEffect(()=>{
+    tokenCheck()
+    if (loggedIn) {
+      history.push("/cards"); 
+    } 
+  }, [loggedIn,history])
+
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -64,7 +75,6 @@ function App() {
   }
   useEffect(() => {
     //получение данных пользователя
-
     api
       .getInfoProfile()
       .then((dataUser) => {
@@ -160,50 +170,19 @@ function App() {
         console.log(err, "Ошибка при отправке новой карточки");
       });
   }
-  //_______________NEW_____________________________________
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [userEmail, setUserEmail] = React.useState({email:""});
-  const[statusSignIn, setStatusSignIn]= React.useState(false)
-  const history = useHistory();
-  
-  useEffect(()=>{
-   //S// console.log(statusSignIn, 'xxxx useEffect') 
-    tokenCheck()
-    // console.log('Вызвался UseEffect')
-  }, [loggedIn])
-  useEffect(() => {
-    //S//console.log(loggedIn, 'loggedIn')
-    if (loggedIn) {
-      // setStatusSignIn(true) && <Header />
-      history.push("/cards");
-      
-      // console.log('#####user',userEmail.email)
-    }
-    
-  },[loggedIn])
-  
-
   function handleLogin(){
     setLoggedIn(true);
   }
-
   const tokenCheck=()=>{
     if (localStorage.getItem('jwt')){
       let token = localStorage.getItem('jwt');
-      console.log("token yyyyyyy",token)
-
       Auth
         .getContent(token)
         .then((response)=>{
-          //S//console.log("response yyyyyyy",response)
-          // console.log("App.js getContent .then1 ###response", response)
           return response.json()
         })
         .then((data)=>{
-          //S//console.log(data, 'yyyyyyy BEFORE TRUE')
-          // console.log("App.js getContent .then2 ###data", data)
           if(data){
-            //S//console.log(data, 'yyyyyyy TRUe')
             setLoggedIn(true)
             setUserEmail({email:data.data.email})
             
@@ -211,10 +190,9 @@ function App() {
 
           }
         })
-        .catch((err)=>{console.log('err из getContent',err)})
+        .catch((err)=>{console.log(err,"Ошибка при проверке токена")})
     }
   }
-  
   function signOut(){//Выход
     localStorage.removeItem('jwt');
     history.push('/sign-in');
@@ -229,8 +207,18 @@ function App() {
     history.push('/sign-in')
      setStatusSignIn(false)
   }
-  console.log("statusSignIn", statusSignIn)
-  console.log("statusLogedIn",loggedIn)
+  //_______________NEW_____________________________________
+
+  
+
+
+  
+
+
+
+  
+
+ 
   //_________________________________________________________
   return (
     <>
@@ -261,7 +249,7 @@ function App() {
               />
 
               <Route exact path="/sign-up">
-                <Register />
+                <Register signIn={signIn}/>
                 
               </Route>
 

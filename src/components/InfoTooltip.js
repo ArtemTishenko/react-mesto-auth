@@ -1,7 +1,7 @@
-import imgOk from '../../src/blocks/popup/__info-img/info-img-ok.svg';
-import imgCancel from '../../src/blocks/popup/__info-img/info-img-cancel.svg';
+import imgOk from "../../src/blocks/popup/__info-img/info-img-ok.svg";
+import imgCancel from "../../src/blocks/popup/__info-img/info-img-cancel.svg";
 
-function InfoTooltip(props){
+function InfoTooltip(props) {
   return (
     <>
       <div
@@ -33,5 +33,5 @@ function InfoTooltip(props){
       </div>
     </>
   );
-} 
+}
 export default InfoTooltip;

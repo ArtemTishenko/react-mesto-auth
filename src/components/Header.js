@@ -1,8 +1,7 @@
 import logo from '../../src/blocks/header/__logo/logo.svg'
 //import ham from '../../src/blocks/header/__hamburger-menu/ham1.svg'
-//import { useCallback, useEffect } from 'react';
+
 function Header(props) {
-    console.log(props, 'props')
     
     const makeHeaderTitle = () => {
       if (props.statusLoggedIn) {
@@ -23,12 +22,12 @@ function Header(props) {
         <img className="header__logo" src={logo} alt="Логотип Mesto"/>
         <div className="header__nav">
           <p className="header__email">{`${props.statusLoggedIn ? props.userEmail.email:''}`}</p>
-          <a onClick={props.statusLoggedIn //false
+          <button onClick={props.statusLoggedIn //false
                       ? props.signOut
                       :(props.statusSignIn ?props.signIn :props.signUp)} 
               className="header__sign">
                 {makeHeaderTitle()}
-          </a>      
+          </button>      
         </div>
         <button className="header__hamburger-menu button " ></button>
 

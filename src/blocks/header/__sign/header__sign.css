@@ -1,6 +1,10 @@
 .header__sign{
   margin: auto 0;
   cursor: pointer;
+  background-color: inherit;
+  color: white;
+  border: none;
+  outline: none;
 }
 
 .header__sign:hover{
