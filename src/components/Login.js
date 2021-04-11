@@ -4,7 +4,7 @@ import * as Auth from "../components/Auth.js";
 import InfoTooltip from "./InfoTooltip.js";
 
 function Login({ onLogin }) {
-  const [statusInfoToolTip, setStatusInfoToolTip] = React.useState(""); //стейт с ошибкой
+  const [statusInfoToolTip, setStatusInfoToolTip] = React.useState(false); //стейт с ошибкой
   const [openInfoToolTip, setOpenInfoToolTip] = React.useState(false); // стэйт для отображения информационного соосбщения
   const [userData, setUserData] = React.useState({
     password: "",
@@ -48,7 +48,7 @@ function Login({ onLogin }) {
         console.log("err из Login", err);
       });
   };
-
+  console.log("statusInfoToolTip",statusInfoToolTip)
   return (
     <>
       <div className="auth">

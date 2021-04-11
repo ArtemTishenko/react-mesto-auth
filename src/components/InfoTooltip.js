@@ -19,14 +19,14 @@ function InfoTooltip(props) {
           ></button>
           <img
             className="popup__info-img"
-            src={props.status !== "400" ? imgOk : imgCancel}
+            src={(props.status === "400")||(props.status === "401") ?imgCancel  :imgOk }
             alt="статус"
           />
           <p className="popup__info-title">
             {`${
-              props.status !== "400"
-                ? "Вы успешно зарегистрировались!"
-                : "Что-то пошло не так! Попробуйте ещё раз."
+              (props.status === "400")||(props.status === "401") 
+                ? "Что-то пошло не так! Попробуйте ещё раз."
+                : "Вы успешно зарегистрировались!"
             }`}
           </p>
         </div>
