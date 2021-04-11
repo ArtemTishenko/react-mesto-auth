@@ -48,7 +48,7 @@ function Login({ onLogin }) {
         console.log("err из Login", err);
       });
   };
-  console.log("statusInfoToolTip",statusInfoToolTip)
+  
   return (
     <>
       <div className="auth">
