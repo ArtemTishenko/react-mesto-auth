@@ -23,4 +23,5 @@
 * useHistory
 * EsLint
 
-
+# Для старта
+```npm run start```
